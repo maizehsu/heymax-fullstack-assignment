@@ -5,6 +5,7 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Login from './pages/Login';
 import UserPage from "./pages/UserPage";
+import OrderInfo from './pages/OrderInfo';
 
 const AppRouter = () => {
     return (
@@ -16,6 +17,7 @@ const AppRouter = () => {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/product/:id" element={<ProductDetail/>}/>
                 <Route path="/user" element={<UserPage/>}/>
+                <Route path="/order-info" element={<OrderInfo/>} />
             </Routes>
         </Router>
     );
