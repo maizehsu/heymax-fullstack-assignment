@@ -93,7 +93,18 @@ def configure_routes(app):
         user = next((u for u in users if u.id == user_id), None)
         if user is None:
             return jsonify({'success': False, 'error': 'Invalid user ID'})
-        return jsonify([{'id': item.id, 'name': item.name, 'quantity': quantity} for item, quantity in carts[user_id].items.items()])
+
+        # Retrieve the shopping cart items and quantities
+        cart_items = carts[user_id].items
+        cart_items_details = []
+
+        for item_id, quantity in cart_items.items():
+            item = next((item for item in catalog if item.id == item_id), None)
+            if item:
+                cart_items_details.append(
+                    {'id': item.id, 'name': item.name, 'quantity': quantity})
+
+        return jsonify({'success': True, 'cart_items': cart_items_details})
 
     @app.route('/user/order/place', methods=['POST'])
     def place_order():
