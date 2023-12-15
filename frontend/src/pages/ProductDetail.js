@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import {useParams, Link} from 'react-router-dom';
 
 function ProductDetail() {
     const [product, setProduct] = useState(null);
@@ -7,9 +7,9 @@ function ProductDetail() {
 
     useEffect(() => {
         fetch(`/catalog/${id}`)
-            .then(response => response.json())
-            .then(data => setProduct(data))
-            .catch(error => console.error('Error fetching product details:', error));
+            .then((response) => response.json())
+            .then((data) => setProduct(data))
+            .catch((error) => console.error('Error fetching product details:', error));
     }, [id]);
 
     if (!product) {
@@ -17,12 +17,13 @@ function ProductDetail() {
     }
 
     return (
-        <div>
+        <div style={{textAlign: 'center'}}>
             <h1>{product.name}</h1>
             <p>{product.description}</p>
-            <p>{product.price}</p>
-            <p>{product.inventory_count}</p>
-            <p>{product.category}</p>
+            <p>Price: ${product.price}</p>
+            <p>Inventory: {product.inventory_count}</p>
+            <p>Category: {product.category}</p>
+            <Link to="/">Return to Home</Link>
         </div>
     );
 }

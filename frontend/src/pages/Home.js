@@ -11,9 +11,9 @@ function Home() {
 
     useEffect(() => {
         fetch('/catalog')
-            .then(response => response.json())
-            .then(data => setItems(data))
-            .catch(error => console.error('Error fetching catalog:', error));
+            .then((response) => response.json())
+            .then((data) => setItems(data))
+            .catch((error) => console.error('Error fetching catalog:', error));
     }, []);
 
     const handleViewDetails = (id) => {
@@ -38,7 +38,7 @@ function Home() {
             return;
         }
 
-        const userId = 1; // Replace with actual user ID from user context or session
+        const userId = user.id;
         fetch('/cart/add', {
             method: 'POST',
             headers: {
@@ -46,8 +46,8 @@ function Home() {
             },
             body: JSON.stringify({user_id: userId, item_id: itemId}),
         })
-            .then(response => response.json())
-            .then(data => {
+            .then((response) => response.json())
+            .then((data) => {
                 if (data.success) {
                     notification.success({
                         message: 'Item Added to Cart',
@@ -55,7 +55,7 @@ function Home() {
                     });
                 }
             })
-            .catch(error => console.error('Error adding item to cart:', error));
+            .catch((error) => console.error('Error adding item to cart:', error));
     };
 
     const goToCart = () => {
@@ -63,38 +63,46 @@ function Home() {
     };
 
     return (
-        <div className="App">
-            {user ? (
-                <div>
-                    <span>Welcome, {user.username}!</span>
-                    <Button onClick={handleGoToUserPage}>User Page</Button>
-                    <LogoutButton/>
-                </div>
-            ) : (
-                <Button onClick={handleGoToLogin}>Login</Button>
-            )}
-            <Button type="primary" onClick={goToCart}
-                    style={{marginBottom: 16}}>
-                Go to Cart
-            </Button>
-            <Row gutter={[16, 16]}>
-                {items.map(item => (
-                    <Col span={8} key={item.id}>
-                        <Card title={item.name} bordered={false}>
-                            {/*<p>Description: {item.description}</p>*/}
-                            <p>Price: ${item.price}</p>
-                            <p>Inventory: {item.inventory_count}</p>
-                            {/*<p>Category: {item.category}</p>*/}
-                            <Button type="primary"
-                                    onClick={() => handleViewDetails(item.id)}>View
-                                Details</Button>
-                            <Button type="default" style={{marginLeft: 8}}
-                                    onClick={() => handleAddToCart(item.id)}>Add
-                                to Cart</Button>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+        <div className="home-container"
+             style={{backgroundColor: 'white', padding: '20px'}}>
+            <div className="header">
+                {user ? (
+                    <div>
+                        <span>Welcome, {user.username}!</span>
+                        <Button onClick={handleGoToUserPage}>User Page</Button>
+                        <LogoutButton/>
+                    </div>
+                ) : (
+                    <Button onClick={handleGoToLogin}>Login</Button>
+                )}
+            </div>
+            <div className="content">
+                <Button type="primary" onClick={goToCart}
+                        style={{marginBottom: '16px'}}>
+                    Go to Cart
+                </Button>
+                <Row gutter={[16, 16]}>
+                    {items.map((item) => (
+                        <Col span={8} key={item.id}>
+                            <Card title={item.name} bordered={false}>
+                                <p>Price: ${item.price}</p>
+                                <p>Inventory: {item.inventory_count}</p>
+                                <Button type="primary"
+                                        onClick={() => handleViewDetails(item.id)}>
+                                    View Details
+                                </Button>
+                                <Button
+                                    type="default"
+                                    style={{marginLeft: '8px'}}
+                                    onClick={() => handleAddToCart(item.id)}
+                                >
+                                    Add to Cart
+                                </Button>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+            </div>
         </div>
     );
 }

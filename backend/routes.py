@@ -95,7 +95,6 @@ def configure_routes(app):
         if user is None:
             return jsonify({'success': False, 'error': 'Invalid user ID'})
 
-        # Retrieve the shopping cart items and quantities
         cart_items = carts[user_id].items
         cart_items_details = []
 
@@ -169,9 +168,16 @@ def configure_routes(app):
         return jsonify({'success': True, 'review_id': new_review_id})
 
     @app.route('/reviews/<int:item_id>', methods=['GET'])
-    def get_reviews(item_id):
+    def get_reviews_from_item_id(item_id):
         # Retrieve the reviews from reviews using item_id
         reviews_for_the_item = [review for review in reviews if review.item_id == item_id]
+        # Return all the reviews associated with the item
+        return jsonify({'success': True, 'reviews': reviews_for_the_item})
+
+    @app.route('/reviews/<int:user_id>', methods=['GET'])
+    def get_reviews_from_user_id(user_id):
+        reviews_for_the_item = [review for review in reviews if
+                                review.user_id == user_id]
         # Return all the reviews associated with the item
         return jsonify({'success': True, 'reviews': reviews_for_the_item})
 
@@ -187,7 +193,7 @@ def configure_routes(app):
         user = next((u for u in users if u.id == user_id), None)
         if user is None:
             return jsonify({'success': False, 'error': 'Invalid user ID'})
-        return jsonify({'success': True, 'orders': user.orders})
+        return jsonify({'success': True, 'orders': user.order_history})
 
     @app.route('/discount/apply', methods=['POST'])
     def apply_discount():

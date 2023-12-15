@@ -102,4 +102,18 @@ users = [
 ]
 
 carts = {user.id: ShoppingCart() for user in users}
-reviews = []
+
+reviews = [
+    Review(1, 1, 1, 5, "Great product!"),
+    Review(2, 1, 2, 4, "Good product!"),
+    Review(3, 2, 1, 3, "Okay product!"),
+    Review(4, 2, 2, 2, "Bad product!"),
+    Review(5, 3, 1, 1, "Terrible product!"),
+    Review(6, 3, 2, 5, "Great product!"),
+    Review(7, 1, 3, 4, "Good product!"),
+    Review(8, 1, 4, 3, "Okay product!"),
+    Review(9, 2, 3, 2, "Bad product!"),
+    Review(10, 2, 4, 1, "Terrible product!"),
+    Review(11, 3, 3, 5, "Great product!"),
+    Review(12, 3, 4, 4, "Good product!"),
+]
