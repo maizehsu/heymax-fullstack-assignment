@@ -82,9 +82,22 @@ class Review:
 catalog = [
     Item(1, "Item 1", "Description 1", 10.99, 10, "Category 1"),
     Item(2, "Item 2", "Description 2", 12.99, 10, "Category 1"),
+    Item(3, "Item 3", "Description 3", 14.99, 10, "Category 2"),
+    Item(4, "Item 4", "Description 4", 16.99, 10, "Category 2"),
+    Item(5, "Item 5", "Description 5", 18.99, 10, "Category 3"),
+    Item(6, "Item 6", "Description 6", 20.99, 10, "Category 3"),
+    Item(7, "Item 7", "Description 7", 22.99, 10, "Category 4"),
+    Item(8, "Item 8", "Description 8", 24.99, 10, "Category 4"),
+    Item(9, "Item 9", "Description 9", 26.99, 10, "Category 5"),
+    Item(10, "Item 10", "Description 10", 28.99, 10, "Category 5"),
+    Item(11, "Item 11", "Description 11", 30.99, 10, "Category 6"),
+    Item(12, "Item 12", "Description 12", 32.99, 10, "Category 6"),
 ]
+
 users = [
     User(1, "user1", "user1@example.com"),
     User(2, "user2", "user2@example.com"),
+    User(3, "user3", "user3@example.com"),
 ]
+
 carts = {user.id: ShoppingCart() for user in users}
