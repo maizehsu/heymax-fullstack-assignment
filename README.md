@@ -26,37 +26,25 @@ For extra credit, consider adding the following features:
 
 1. Navigate to the "backend" directory:
 
-bashCopy code
-
 `cd backend`
 
 2. Create a virtual environment (if you haven't already):
-
-bashCopy code
 
 `python3 -m venv venv`
 
 3. Activate the virtual environment:
 
-bashCopy code
-
 `source venv/bin/activate`
 
 4. Install the required Python packages:
-
-bashCopy code
 
 `pip install flask`
 
 5. Make the `run` script executable:
 
-bashCopy code
-
 `chmod +x ../bin/run`
 
 6. Run the Flask app using the provided script:
-
-bashCopy code
 
 `../bin/run`
 
@@ -66,19 +54,13 @@ The Flask backend should now be running at [http://localhost:5000](http://localh
 
 1. Navigate to the "frontend" directory:
 
-bashCopy code
-
 `cd frontend`
 
 2. Install the required Node.js packages:
 
-bashCopy code
-
 `npm install`
 
 3. Start the frontend development server:
-
-bashCopy code
 
 `npm start`
 
