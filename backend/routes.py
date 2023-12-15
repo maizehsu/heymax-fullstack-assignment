@@ -132,6 +132,8 @@ def configure_routes(app):
     @app.route('/reviews/<int:item_id>', methods=['GET'])
     def get_reviews(item_id):
         # TODO: Add logic to get reviews for a specific item
+        # Retrieve item from catelog using item id
+        item =
         pass
 
     @app.route('/search', methods=['GET'])
