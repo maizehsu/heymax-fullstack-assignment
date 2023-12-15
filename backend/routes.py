@@ -1,14 +1,9 @@
 from flask import jsonify, request, session
-from .models import catalog, users, User, ShoppingCart, carts, Order, Review
+from .models import catalog, users, User, ShoppingCart, carts, Order, Review, reviews
 
 
 def configure_routes(app):
 
-    """
-    Routes: /catalog,
-    Methods: GET,
-    Description: Get all products in the catalog
-    """
     @app.route('/catalog', methods=['GET'])
     def get_catalog():
         return jsonify([{'id': item.id, 'name': item.name,
@@ -16,6 +11,16 @@ def configure_routes(app):
                          'inventory_count': item.inventory_count,
                          'category': item.category}
                         for item in catalog])
+
+    @app.route('/catalog/<int:item_id>', methods=['GET'])
+    def get_catalog_by_id(item_id):
+        item = next((i for i in catalog if i.id == item_id), None)
+        if item is None:
+            return jsonify({'success': False, 'error': 'Invalid item ID'})
+        return jsonify({'id': item.id, 'name': item.name,
+                        'description': item.description, 'price': item.price,
+                        'inventory_count': item.inventory_count,
+                        'category': item.category})
 
     @app.route('/user/create', methods=['POST'])
     def create_user():
@@ -44,7 +49,6 @@ def configure_routes(app):
 
     @app.route('/user/login', methods=['POST'])
     def login_user():
-        # TODO: Add logic to authenticate the user
         data = request.json
         username = data.get('username')
         password = data.get('password') # TODO: Add encryption
@@ -86,8 +90,10 @@ def configure_routes(app):
 
     @app.route('/user/cart/<int:user_id>', methods=['GET'])
     def view_cart(user_id):
-        # TODO: Add logic to display the user's cart
-        pass
+        user = next((u for u in users if u.id == user_id), None)
+        if user is None:
+            return jsonify({'success': False, 'error': 'Invalid user ID'})
+        return jsonify([{'id': item.id, 'name': item.name, 'quantity': quantity} for item, quantity in carts[user_id].items.items()])
 
     @app.route('/user/order/place', methods=['POST'])
     def place_order():
@@ -96,9 +102,9 @@ def configure_routes(app):
 
     @app.route('/cart/add', methods=['POST'])
     def add_to_cart():
-        # TODO: Get user_id and item_id from request
-        user_id = 1
-        item_id = 1
+        data = request.json
+        user_id = data.get('user_id')
+        item_id = data.get('item_id')
         quantity = 1  # Default quantity
 
         carts[user_id].add_item(item_id, quantity)
@@ -106,35 +112,56 @@ def configure_routes(app):
 
     @app.route('/cart/remove', methods=['POST'])
     def remove_from_cart():
-        # TODO: Get user_id and item_id from request
-        user_id = 1
-        item_id = 1
+        data = request.json
+        user_id = data.get('user_id')
+        item_id = data.get('item_id')
         quantity = 1  # Default quantity
 
         carts[user_id].remove_item(item_id, quantity)
         return jsonify({'success': True})
 
-    @app.route('/discount/apply', methods=['POST'])
-    def apply_discount():
-        # TODO: Add logic to apply discount
-        pass
-
     @app.route('/inventory/update', methods=['POST'])
     def update_inventory():
-        # TODO: Add logic to update inventory
-        pass
+        data = request.json
+        item_id = data.get('item_id')
+        item_description = data.get('item_description')
+        item_price = data.get('item_price')
+        item_inventory_count = data.get('item_inventory_count')
+        item_category = data.get('item_category')
+
+        # Update the data
+        if not item_id or not item_description or not item_price or not item_inventory_count or not item_category:
+            return jsonify({'success': False, 'error': 'Missing required fields'})
+        item = next((i for i in catalog if i.id == item_id), None)
+        if item is None:
+            return jsonify({'success': False, 'error': 'Invalid item ID'})
+        item.description = item_description
+        item.price = item_price
+        item.inventory_count = item_inventory_count
+        item.category = item_category
+
+        return jsonify({'success': True, 'item_id': item_id})
 
     @app.route('/reviews/add', methods=['POST'])
     def add_review():
-        # TODO: Add logic to add a product review
-        pass
+        data = request.json
+        user_id = data.get('user_id')
+        item_id = data.get('item_id')
+        rating = data.get('rating')
+        comment = data.get('comment')
+
+        # Add the review to reviews
+        new_review_id = len(reviews) + 1
+        new_review = Review(new_review_id, user_id, item_id, rating, comment)
+        reviews.append(new_review)
+        return jsonify({'success': True, 'review_id': new_review_id})
 
     @app.route('/reviews/<int:item_id>', methods=['GET'])
     def get_reviews(item_id):
-        # TODO: Add logic to get reviews for a specific item
-        # Retrieve item from catelog using item id
-        item =
-        pass
+        # Retrieve the reviews from reviews using item_id
+        reviews_for_the_item = [review for review in reviews if review.item_id == item_id]
+        # Return all the reviews associated with the item
+        return jsonify({'success': True, 'reviews': reviews_for_the_item})
 
     @app.route('/search', methods=['GET'])
     def search_products():
@@ -145,5 +172,12 @@ def configure_routes(app):
 
     @app.route('/order/history/<int:user_id>', methods=['GET'])
     def view_order_history(user_id):
-        # TODO: Add logic to view a user's order history
+        user = next((u for u in users if u.id == user_id), None)
+        if user is None:
+            return jsonify({'success': False, 'error': 'Invalid user ID'})
+        return jsonify({'success': True, 'orders': user.orders})
+
+    @app.route('/discount/apply', methods=['POST'])
+    def apply_discount():
+        # TODO: Add logic to apply discount
         pass

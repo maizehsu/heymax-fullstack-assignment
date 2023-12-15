@@ -13,6 +13,7 @@ const AppRouter = () => {
         <Route path="/product/:id" element={<ProductDetail/>} />
         <Route path="/cart" element={<Cart/>} />
         <Route path="/login" element={<LoginRegister/>} />
+        <Route path="/product/:id" element={<ProductDetail/>} />
         {/* Define other routes here */}
       </Routes>
     </Router>

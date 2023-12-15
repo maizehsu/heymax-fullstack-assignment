@@ -101,3 +101,4 @@ users = [
 ]
 
 carts = {user.id: ShoppingCart() for user in users}
+reviews = []
