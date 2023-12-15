@@ -22,6 +22,7 @@ class User:
         self.id = id
         self.username = username
         self.email = email
+        self.password = None
         self.shopping_cart = ShoppingCart()
         self.order_history = []
 

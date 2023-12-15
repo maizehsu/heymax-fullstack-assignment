@@ -1,10 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Card, Button, Row, Col, notification} from 'antd';
+import {AuthContext} from '../AuthContext';
+import LogoutButton from '../components/LogoutButton';
 
 function Home() {
     const [items, setItems] = useState([]);
     const navigate = useNavigate();
+    const {user} = useContext(AuthContext);
 
     useEffect(() => {
         fetch('/catalog')
@@ -17,7 +20,24 @@ function Home() {
         navigate(`/product/${id}`);
     };
 
+    const handleGoToLogin = () => {
+        navigate('/login');
+    };
+
+    const handleGoToUserPage = () => {
+        navigate('/user');
+    };
+
     const handleAddToCart = (itemId) => {
+        if (!user) {
+            notification.warning({
+                message: 'Please log in to add items to your cart',
+                description: 'You will be redirected to the login page.',
+            });
+            navigate('/login');
+            return;
+        }
+
         const userId = 1; // Replace with actual user ID from user context or session
         fetch('/cart/add', {
             method: 'POST',
@@ -44,6 +64,15 @@ function Home() {
 
     return (
         <div className="App">
+            {user ? (
+                <div>
+                    <span>Welcome, {user.username}!</span>
+                    <Button onClick={handleGoToUserPage}>User Page</Button>
+                    <LogoutButton/>
+                </div>
+            ) : (
+                <Button onClick={handleGoToLogin}>Login</Button>
+            )}
             <Button type="primary" onClick={goToCart}
                     style={{marginBottom: 16}}>
                 Go to Cart

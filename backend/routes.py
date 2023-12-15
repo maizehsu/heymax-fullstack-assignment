@@ -42,6 +42,7 @@ def configure_routes(app):
         # Create and add the new user to the users list
         new_user_id = len(users) + 1
         new_user = User(new_user_id, username, email)
+        new_user.password = password
         users.append(new_user)
         carts[new_user_id] = ShoppingCart()
 
